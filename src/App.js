@@ -1,27 +1,36 @@
-import './App.css';
-import { Routes, Route } from "react-router-dom";
-import Header from './components/header';
-import IdnApi from './pages/indonesiaAPI';
-import SearchApi from './pages/searchAPI';
-import CovidApi from './pages/covidAPI';
-import ProgrammingApi from './pages/programmingAPI';
-import SaveAPI from './pages/Save';
-
+import { Route, Routes } from "react-router-dom";
+import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
+import routes from "./router";
 
 function App() {
   return (
-    <div className="App">
-      {/* <SearchApi /> */}
-      <Header />
-      <Routes>
-        <Route path="/" element={<SearchApi  />} />
-        <Route path="/indonesia" element={<IdnApi kategori="indonesia" />} />
-        <Route path="/programming" element={<ProgrammingApi kategori="programming" />} />
-        <Route path="/covid" element={<CovidApi kategori="covid" />} />
-        <Route path="/save" element={<SaveAPI />} />
-      </Routes>
-      
-    </div>
+    <>
+      <div className="main-container">
+        <Navbar />
+        <div className="main-content mt-5">
+          <Routes>
+            {routes.map((route, index) => {
+              return (
+                <Route key={index} path={route.path} element={route.element}>
+                  {route.children &&
+                    route.children.map((child, index) => {
+                      return (
+                        <Route
+                          key={index}
+                          path={child.path}
+                          element={child.element}
+                        />
+                      );
+                    })}
+                </Route>
+              );
+            })}
+          </Routes>
+        </div>
+        <Footer />
+      </div>
+    </>
   );
 }
 
